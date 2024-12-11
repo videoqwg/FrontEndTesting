@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form </h3>
+        <h3 class="title">Login Form</h3>
       </div>
 
       <el-form-item prop="username">
@@ -41,7 +41,14 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="6">
+          <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+        </el-col>
+        <el-col :span="6">
+          <el-button type="default" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
+        </el-col>
+      </el-row>
 
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
@@ -120,6 +127,9 @@ export default {
           return false
         }
       })
+    },
+    handleRegister() {
+      this.$router.push('/register')
     }
   }
 }
@@ -149,6 +159,7 @@ $cursor: #fff;
     input {
       background: transparent;
       border: 0px;
+      appearance: none;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
@@ -232,6 +243,10 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .longer-button {
+    width: 200%;
   }
 }
 </style>
