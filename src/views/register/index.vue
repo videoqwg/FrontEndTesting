@@ -1,6 +1,6 @@
 <template>
   <div class="register-container">
-    <el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">register Form</h3>
@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     const validatePassword = (rule, value, callback) => {
@@ -119,16 +121,33 @@ export default {
         this.$refs.password.focus()
       })
     },
-    onSubmit() {
-      this.$refs.registerFormRef.validate(valid => {
+    async onSubmit() {
+      this.$refs.registerForm.validate(async valid => {
         if (valid) {
-          // 处理注册逻辑
-          this.$message({
-            message: '注册成功',
-            type: 'success'
-          })
-          this.dialogVisible = false
-          this.$router.push('/login') // 重定向到登录页面
+          try {
+            // 向后端提交用户名，检验用户是否存在
+            const response = await axios.post('http://localhost:8080/user/register', { username: this.registerForm.username, password: this.registerForm.password })
+            console.log(response)
+            if (response.data.code === 400) {
+              this.$message({
+                message: '用户名已存在',
+                type: 'error'
+              })
+            } else {
+              // 用户名不存在，继续注册流程
+              this.$message({
+                message: '注册成功',
+                type: 'success'
+              })
+              this.dialogVisible = false
+              this.$router.push('/login') // 重定向到登录页面
+            }
+          } catch (error) {
+            this.$message({
+              message: '服务器错误，请稍后再试',
+              type: 'error'
+            })
+          }
         } else {
           this.$message({
             message: '请填写正确的信息',
