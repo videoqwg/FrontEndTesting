@@ -126,7 +126,7 @@ export default {
         if (valid) {
           try {
             // 向后端提交用户名，检验用户是否存在
-            const response = await axios.post('http://localhost:8080/user/register', { username: this.registerForm.username, password: this.registerForm.password })
+            const response = await axios.post('http://localhost:8080/api/user/register', { username: this.registerForm.username, password: this.registerForm.password })
             console.log(response)
             if (response.data.code === 400) {
               this.$message({
