@@ -67,6 +67,18 @@ export const constantRoutes = [
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
+  },
+  {
+    path: '/chat',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/chat/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
   }
   // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true }
