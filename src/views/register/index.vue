@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="registerForm.username"
-          placeholder="请输入用户名"
+          placeholder="请输入手机号码"
           name="username"
           type="text"
           tabindex="1"
@@ -75,10 +75,17 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   data() {
+    const validatePhone = (rule, value, callback) => {
+      const phoneRegex = /^\d{11}$/ // 匹配11位数字
+      if (!phoneRegex.test(value)) {
+        callback(new Error('请输入正确的手机号码'))
+      } else {
+        callback()
+      }
+    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能少于6位'))
@@ -104,7 +111,7 @@ export default {
         checkPassword: ''
       },
       registerRules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: validatePhone, trigger: 'blur' }],
         password: [{ validator: validatePassword, trigger: 'blur' }],
         checkPassword: [{ validator: validateCheckPassword, trigger: 'blur' }]
       }
@@ -121,34 +128,32 @@ export default {
         this.$refs.password.focus()
       })
     },
-    async onSubmit() {
-      this.$refs.registerForm.validate(async valid => {
+    onSubmit() {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
-          try {
-            // 向后端提交用户名，检验用户是否存在
-            const response = await axios.post('http://localhost:8080/api/user/register', { username: this.registerForm.username, password: this.registerForm.password })
-            console.log(response)
-            if (response.data.code === 400) {
-              this.$message({
-                message: '用户名已存在',
-                type: 'error'
-              })
-            } else {
-              // 用户名不存在，继续注册流程
+          this.loading = true
+          this.$store.dispatch('user/register', this.registerForm)
+            .then(() => {
+            // 注册成功
               this.$message({
                 message: '注册成功',
                 type: 'success'
               })
-              this.dialogVisible = false
-              this.$router.push('/login') // 重定向到登录页面
-            }
-          } catch (error) {
-            this.$message({
-              message: '服务器错误，请稍后再试',
-              type: 'error'
+              this.dialogVisible = false // 关闭注册弹窗
+              this.$router.push('/login') // 跳转到登录页面
             })
-          }
+            .catch(error => {
+              // 注册失败
+              this.$message({
+                message: error.message || '服务器错误，请稍后再试',
+                type: 'error'
+              })
+            })
+            .finally(() => {
+              this.loading = false // 结束加载状态
+            })
         } else {
+          // 表单验证失败
           this.$message({
             message: '请填写正确的信息',
             type: 'error'
