@@ -6,7 +6,7 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
+        <pan-thumb :image="image" :height="'100px'" :width="'100px'" :hoverable="false">
           <div>Hello</div>
           {{ user.role }}
         </pan-thumb>
@@ -21,8 +21,8 @@
       <div class="user-education user-bio-section">
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
         <div class="user-bio-section-body">
-          <div class="text-muted">
-            JS in Computer Science from the University of Technology
+          <div class="text-center">
+            <div>{{ user.introduction }}</div>
           </div>
         </div>
       </div>
@@ -54,6 +54,7 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { PanThumb },
@@ -63,11 +64,16 @@ export default {
       default: () => {
         return {
           name: '',
-          email: '',
-          avatar: '',
+          introduction: '',
           role: ''
         }
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['avatar']), // 将 name 映射为计算属性
+    image() {
+      return this.avatar // 直接绑定 Vuex 的 avatar
     }
   }
 }
