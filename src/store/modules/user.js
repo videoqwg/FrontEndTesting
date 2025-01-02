@@ -1,13 +1,16 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, register, logout, getInfo, updateUserData, updateAccountData } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
+    id: '',
     name: '',
     avatar: '',
     introduction: '',
+    phone: '',
+    email: '',
     roles: []
   }
 }
@@ -17,6 +20,9 @@ const state = getDefaultState()
 const mutations = {
   RESET_STATE: (state) => {
     Object.assign(state, getDefaultState())
+  },
+  SET_ID: (state, id) => {
+    state.id = id
   },
   SET_TOKEN: (state, token) => {
     state.token = token
@@ -32,6 +38,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_PHONE: (state, phone) => {
+    state.phone = phone
+  },
+  SET_EMAIL: (state, email) => {
+    state.email = email
   }
 }
 
@@ -51,6 +63,26 @@ const actions = {
     })
   },
 
+  register({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      register({ username: username.trim(), password })
+        .then(response => {
+          const { code, message } = response
+          if (code === 400) {
+            reject(new Error(message || '用户名已存在'))
+          } else if (code === 200) {
+            resolve()
+          } else {
+            reject(new Error(message || '发生未知错误'))
+          }
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  },
+
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -59,16 +91,43 @@ const actions = {
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        const { roles, username, avatar } = data
+        const { userid, roles, username, avatar, introduction, phone, email } = data
         // 角色非空
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+        commit('SET_ID', userid)
         commit('SET_ROLES', roles)
-        console.log(roles)
         commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
+        commit('SET_PHONE', phone)
+        commit('SET_EMAIL', email)
         resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  updateUserData({ commit }, userForm) {
+    return new Promise((resolve, reject) => {
+      updateUserData(userForm).then(response => {
+        commit('SET_INTRODUCTION', userForm.introduction)
+        commit('SET_PHONE', userForm.phone)
+        commit('SET_EMAIL', userForm.email)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  updateAccountData({ commit }, accountForm) {
+    return new Promise((resolve, reject) => {
+      updateAccountData(accountForm).then(response => {
+        commit('SET_NAME', accountForm.username)
+        resolve()
       }).catch(error => {
         reject(error)
       })
