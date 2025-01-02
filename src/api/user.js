@@ -8,6 +8,14 @@ export function login(data) {
   })
 }
 
+export function register(data) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data
+  })
+}
+
 export function getInfo(token) {
   return request({
     url: '/user/info',
@@ -22,3 +30,27 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getUserData() {
+  return request({
+    url: '/user/getUserData',
+    method: 'get'
+  })
+}
+
+export function updateUserData(data) {
+  return request({
+    url: '/user/updateUserData',
+    method: 'post',
+    data
+  })
+}
+
+export function updateAccountData(data) {
+  return request({
+    url: '/user/updateAccountData',
+    method: 'post',
+    data
+  })
+}
+
