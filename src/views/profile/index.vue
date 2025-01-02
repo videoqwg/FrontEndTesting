@@ -13,10 +13,10 @@
               <el-tab-pane label="Activity" name="activity">
                 <activity />
               </el-tab-pane>
-              <el-tab-pane label="Timeline" name="timeline">
-                <timeline />
+              <el-tab-pane label="个人信息" name="userData">
+                <userData :user="user" />
               </el-tab-pane>
-              <el-tab-pane label="Account" name="account">
+              <el-tab-pane label="账号信息" name="account">
                 <account :user="user" />
               </el-tab-pane>
             </el-tabs>
@@ -32,12 +32,13 @@
 import { mapGetters } from 'vuex'
 import UserCard from './components/UserCard'
 import Activity from './components/Activity'
-import Timeline from './components/Timeline'
+// import Timeline from './components/Timeline'
 import Account from './components/Account'
+import UserData from './components/UserData.vue'
 
 export default {
   name: 'Profile',
-  components: { UserCard, Activity, Timeline, Account },
+  components: { UserCard, Activity, Account, UserData },
   data() {
     return {
       user: {},
@@ -48,7 +49,10 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'roles'
+      'roles',
+      'phone',
+      'email',
+      'introduction'
     ])
   },
   created() {
@@ -59,8 +63,10 @@ export default {
       this.user = {
         name: this.name,
         role: this.roles.join(' | '),
-        email: 'admin@test.com',
-        avatar: this.avatar
+        phone: this.phone,
+        email: this.email,
+        avatar: this.avatar,
+        introduction: this.introduction
       }
     }
   }
