@@ -54,7 +54,7 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 
 export default {
   components: { PanThumb },
@@ -65,15 +65,15 @@ export default {
         return {
           name: '',
           introduction: '',
-          role: ''
+          role: '',
+          avatar: ''
         }
       }
     }
   },
-  computed: {
-    ...mapGetters(['avatar']), // 将 name 映射为计算属性
-    image() {
-      return this.avatar // 直接绑定 Vuex 的 avatar
+  data() {
+    return {
+      image: this.user.avatar
     }
   }
 }
