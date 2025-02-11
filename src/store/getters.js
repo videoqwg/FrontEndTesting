@@ -13,6 +13,12 @@ const getters = {
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
   permission_routes: state => state.permission.routes,
-  errorLogs: state => state.errorLog.logs
+  errorLogs: state => state.errorLog.logs,
+  friends: state => state.user.friends,
+  groups: state => state.user.groups,
+  messages: state => state.messages.messages,
+  newMessages: state => state.messages.newMessages,
+  notifications: state => state.notifications.notifications,
+  loadMask: state => state.notifications.loadMask
 }
 export default getters
