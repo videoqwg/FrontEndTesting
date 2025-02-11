@@ -5,6 +5,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import WebSocketSingleton from '@/utils/websocketInstance'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -35,6 +36,19 @@ router.beforeEach(async(to, from, next) => {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const { roles } = await store.dispatch('user/getInfo')
+          // 添加websocket监听器
+          const wsInstance = WebSocketSingleton.getInstance(store.getters.id)
+          wsInstance.addEventListener('message', (event) => {
+            const command = JSON.parse(event.data)
+            if (command.senderId !== store.getters.id) {
+              // 使用 context.dispatch 调用 messages 模块的 action
+              if (command.commandType === 'chat') {
+                store.dispatch('messages/saveMessage', { message: command, userId: WebSocketSingleton.getId() })
+              } else if (command.commandType === 'notification') {
+                store.dispatch('notifications/saveNotification', { notification: command, userId: WebSocketSingleton.getId() })
+              }
+            }
+          })
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
