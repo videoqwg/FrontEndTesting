@@ -6,7 +6,7 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <search id="header-search" class="right-menu-item hover-effect" />
 
         <error-log class="errLog-container right-menu-item hover-effect" />
 
@@ -16,6 +16,11 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
+        <div class="right-menu-item hover-effect">
+          <keep-alive>
+            <LayNotice id="header-notice" />
+          </keep-alive>
+        </div>
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -53,6 +58,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import LayNotice from '@/components/Notice/lay-notice/index.vue'
 
 export default {
   components: {
@@ -61,7 +67,8 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search
+    Search,
+    LayNotice
   },
   computed: {
     ...mapGetters([
