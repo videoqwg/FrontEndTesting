@@ -16,11 +16,10 @@ export function register(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: '/user/info',
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 
@@ -38,6 +37,28 @@ export function getUserData() {
   })
 }
 
+export function getFriends() {
+  return request({
+    url: '/user/getFriends',
+    method: 'get'
+  })
+}
+
+export function addFriend(data) {
+  return request({
+    url: '/user/addFriend',
+    method: 'post',
+    data
+  })
+}
+
+export function getGroups() {
+  return request({
+    url: '/user/getGroups',
+    method: 'get'
+  })
+}
+
 export function updateUserData(data) {
   return request({
     url: '/user/updateUserData',
@@ -49,6 +70,54 @@ export function updateUserData(data) {
 export function updateAccountData(data) {
   return request({
     url: '/user/updateAccountData',
+    method: 'post',
+    data
+  })
+}
+
+export function loadMessages() {
+  return request({
+    url: '/user/loadMessages',
+    method: 'get'
+  })
+}
+
+export function getFriendInfo(data) {
+  return request({
+    url: '/user/getFriendInfo',
+    method: 'post',
+    data
+  })
+}
+
+export function sendCommand(data) {
+  return request({
+    url: '/user/sendCmd',
+    method: 'post',
+    data
+  })
+}
+
+export function sendGroupCommand(data) {
+  return request({
+    url: '/user/sendGroupCmd',
+    method: 'post',
+    data
+  })
+}
+
+// 同步消息
+export function syncMessages(data) {
+  return request({
+    url: '/user/syncMessages',
+    method: 'post',
+    data
+  })
+}
+
+export function syncNotifications(data) {
+  return request({
+    url: '/user/syncNotifications',
     method: 'post',
     data
   })
