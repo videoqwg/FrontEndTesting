@@ -75,8 +75,20 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/chat/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: 'Chat',
+        meta: { title: 'Chat', icon: 'user', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/test',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/test/index'),
+        name: 'Test',
+        meta: { title: 'Test', icon: 'bug', noCache: true }
       }
     ]
   }
